@@ -64,7 +64,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🤖 IA Demo")
+st.title("🏠 Home")
 st.markdown(
     """
     <p style="font-size: 1.3rem; color: #a0aec0; margin-bottom: 2rem;">
@@ -96,6 +96,7 @@ with col1:
         """,
         unsafe_allow_html=True,
     )
+    st.page_link("pages/1_Iris_Classifier.py", label="🌸 Ir a Iris Classifier", icon="➡️")
 
 with col2:
     st.markdown(
@@ -116,3 +117,4 @@ with col2:
         """,
         unsafe_allow_html=True,
     )
+    st.page_link("pages/2_IA_Act_Chatbot.py", label="📜 Ir a IA Act Chatbot", icon="➡️")
