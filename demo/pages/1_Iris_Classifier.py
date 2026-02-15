@@ -40,16 +40,11 @@ st.markdown("""
 <style>
     /* Fuentes más grandes y legibles */
     .main .block-container { max-width: 1100px; padding-top: 2rem; }
-    h1 { font-size: 2.8rem !important; color: #f0f0f0 !important; }
-    h2 { font-size: 2rem !important; color: #e8e8e8 !important; }
-    h3 { font-size: 1.5rem !important; color: #e0e0e0 !important; }
-    p, li, .stMarkdown { font-size: 1.1rem !important; color: #d4d4d4 !important; }
+    h1 { font-size: 2.8rem !important; }
+    h2 { font-size: 2rem !important; }
+    h3 { font-size: 1.5rem !important; }
+    p, li, .stMarkdown { font-size: 1.1rem !important; }
     .stTabs [data-baseweb="tab"] { font-size: 1.15rem !important; padding: 12px 24px; }
-
-    /* Texto claro sobre fondo oscuro */
-    .stMarkdown h4, .stMarkdown h5 { color: #e8e8e8 !important; }
-    .stMarkdown strong, .stMarkdown b { color: #f0f0f0 !important; }
-    label, .stSlider label span, .stNumberInput label span { color: #d4d4d4 !important; }
 
     /* Tarjetas de métricas */
     .metric-card {
@@ -118,7 +113,7 @@ st.markdown("""
     /* Sliders más grandes y con más separación */
     .stSlider { margin-bottom: 2rem !important; padding-top: 0.5rem; }
     .stSlider > div > div { padding-top: 0.5rem; }
-    .stSlider label { font-size: 1.1rem !important; font-weight: 500; color: #d4d4d4 !important; margin-bottom: 0.5rem !important; }
+    .stSlider label { font-size: 1.1rem !important; font-weight: 500; margin-bottom: 0.5rem !important; }
     .stSlider [data-baseweb="slider"] { margin-top: 0.8rem !important; }
     .stSlider [data-testid="stTickBarMin"],
     .stSlider [data-testid="stTickBarMax"] { color: #a0aec0 !important; font-size: 0.85rem !important; }

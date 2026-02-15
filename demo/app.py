@@ -82,7 +82,7 @@ with col1:
         """
         <div style="background: linear-gradient(135deg, #1a3a2a 0%, #1e4d3a 100%);
                     border: 1px solid #38a169; border-radius: 16px; padding: 2rem;">
-            <h3 style="margin-top: 0;">🌸 Iris Classifier</h3>
+            <h3 style="margin-top: 0; color: #c6f6d5;">🌸 Iris Classifier</h3>
             <p style="color: #c6f6d5;">
                 Clasificación ML clásica con tuning de hiperparámetros.
                 Entrena modelos, explora los datos y haz predicciones interactivas.
@@ -102,7 +102,7 @@ with col2:
         """
         <div style="background: linear-gradient(135deg, #1a2a3a 0%, #1e3a5a 100%);
                     border: 1px solid #3182ce; border-radius: 16px; padding: 2rem;">
-            <h3 style="margin-top: 0;">📜 IA Act Chatbot</h3>
+            <h3 style="margin-top: 0; color: #bee3f8;">📜 IA Act Chatbot</h3>
             <p style="color: #bee3f8;">
                 Chatbot RAG experto en el Reglamento de IA europeo.
                 Respuestas fundamentadas en el texto oficial.
