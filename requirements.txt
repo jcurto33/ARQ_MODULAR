@@ -22,3 +22,7 @@ uvicorn[standard]>=0.29
 # ── Demo ──────────────────────────────────────────────────
 streamlit>=1.35
 requests>=2.31
+
+# ── Visualización ────────────────────────────────────────
+matplotlib>=3.8
+seaborn>=0.13
