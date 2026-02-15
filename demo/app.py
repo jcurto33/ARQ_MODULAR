@@ -15,8 +15,8 @@ if _REPO_ROOT not in sys.path:
 import streamlit as st
 
 st.set_page_config(
-    page_title="IA Demo",
-    page_icon="🤖",
+    page_title="Home",
+    page_icon="🏠",
     layout="wide",
 )
 
@@ -64,7 +64,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🏠 Home")
+st.title("🤖 IA Demo")
 st.markdown(
     """
     <p style="font-size: 1.3rem; color: #a0aec0; margin-bottom: 2rem;">
