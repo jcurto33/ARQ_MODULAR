@@ -1,0 +1,13 @@
+# ── Notebooks ─────────────────────────────────────────────
+jupyter>=1.0
+ipykernel>=6.29
+
+# ── Testing ───────────────────────────────────────────────
+pytest>=8.0
+pytest-cov>=5.0
+httpx>=0.27             # Para tests de FastAPI
+
+# ── Visualización (notebooks) ────────────────────────────
+matplotlib>=3.8
+seaborn>=0.13
+shap>=0.45

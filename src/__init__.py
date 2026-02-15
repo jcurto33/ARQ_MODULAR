@@ -1,0 +1,1 @@
+"""Lógica central del proyecto."""

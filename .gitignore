@@ -1,0 +1,30 @@
+# ── Entorno virtual ───────────────────────────────────────
+.venv/
+venv/
+
+# ── Variables de entorno ─────────────────────────────────
+.env
+
+# ── Datos y persistencia ─────────────────────────────────
+data/
+
+# ── Python ────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# ── IDE ───────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Notebooks checkpoints ────────────────────────────────
+.ipynb_checkpoints/
+
+# ── OS ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
