@@ -5,10 +5,15 @@ Página de Streamlit para el módulo Iris Classifier.
 Permite entrenar el modelo y hacer predicciones interactivas.
 """
 
-import streamlit as st
-import requests
+import sys
+from pathlib import Path
 
-API_URL = "http://localhost:8000"
+_REPO_ROOT = str(Path(__file__).resolve().parent.parent.parent)
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
+
+import streamlit as st
+from src.modules.iris_classifier.entrypoint import train, predict
 
 st.header("🌸 Iris Classifier")
 
@@ -20,16 +25,14 @@ with tab_train:
     if st.button("🚀 Entrenar modelo"):
         with st.spinner("Entrenando…"):
             try:
-                resp = requests.post(f"{API_URL}/iris/train", timeout=120)
-                data = resp.json()
+                result = train()
                 st.success("Entrenamiento completado")
 
-                metrics = data.get("metrics", {})
+                metrics = result.get("metrics", result)
                 st.subheader(f"Mejor modelo: `{metrics.get('selected_model')}`")
-
                 st.json(metrics.get("candidates", {}))
-            except requests.exceptions.ConnectionError:
-                st.error("No se pudo conectar con la API. ¿Está corriendo en el puerto 8000?")
+            except Exception as e:
+                st.error(f"Error durante el entrenamiento: {e}")
 
 # ── Pestaña de predicción ─────────────────────────────────
 with tab_predict:
@@ -44,17 +47,11 @@ with tab_predict:
         petal_width = st.number_input("Petal width (cm)", 0.0, 10.0, 0.2, 0.1)
 
     if st.button("🔮 Predecir"):
-        payload = {
-            "sepal_length": sepal_length,
-            "sepal_width": sepal_width,
-            "petal_length": petal_length,
-            "petal_width": petal_width,
-        }
         try:
-            resp = requests.post(f"{API_URL}/iris/predict", json=payload, timeout=30)
-            result = resp.json()
+            features = [sepal_length, sepal_width, petal_length, petal_width]
+            result = predict(features)
 
             st.success(f"Predicción: **{result['prediction']}**")
             st.bar_chart(result["probabilities"])
-        except requests.exceptions.ConnectionError:
-            st.error("No se pudo conectar con la API.")
+        except Exception as e:
+            st.error(f"Error en la predicción: {e}")

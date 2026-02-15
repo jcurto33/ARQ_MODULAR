@@ -5,11 +5,16 @@ Página de Streamlit para el chatbot del IA Act.
 Interfaz de chat con memoria de sesión.
 """
 
+import sys
 import uuid
-import streamlit as st
-import requests
+from pathlib import Path
 
-API_URL = "http://localhost:8000"
+_REPO_ROOT = str(Path(__file__).resolve().parent.parent.parent)
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
+
+import streamlit as st
+from src.modules.ia_act_chatbot.entrypoint import chat
 
 st.header("📜 IA Act Chatbot")
 st.caption("Pregunta lo que quieras sobre el Reglamento de Inteligencia Artificial (UE 2024/1689)")
@@ -40,14 +45,12 @@ if prompt := st.chat_input("Escribe tu pregunta sobre el IA Act…"):
     with st.chat_message("assistant"):
         with st.spinner("Pensando…"):
             try:
-                resp = requests.post(
-                    f"{API_URL}/chatbot/chat",
-                    json={"session_id": st.session_state.session_id, "message": prompt},
-                    timeout=60,
+                reply = chat(
+                    session_id=st.session_state.session_id,
+                    user_message=prompt,
                 )
-                reply = resp.json()["reply"]
-            except requests.exceptions.ConnectionError:
-                reply = "⚠️ No se pudo conectar con la API. ¿Está corriendo en el puerto 8000?"
+            except Exception as e:
+                reply = f"⚠️ Error al procesar la pregunta: {e}"
 
         st.markdown(reply)
         st.session_state.messages.append({"role": "assistant", "content": reply})

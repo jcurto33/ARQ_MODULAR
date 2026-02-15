@@ -7,6 +7,7 @@ Carga del modelo y predicción.
 from pathlib import Path
 import joblib
 import numpy as np
+import pandas as pd
 
 from shared.config_loader import load_config
 
@@ -37,7 +38,8 @@ def run_prediction(features: list[float]) -> dict:
         {"prediction": str, "probabilities": {species: float, ...}}
     """
     model = _load_model()
-    X = np.array(features).reshape(1, -1)
+    feature_names = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
+    X = pd.DataFrame([features], columns=feature_names)
 
     pred_idx = model.predict(X)[0]
     proba = model.predict_proba(X)[0]

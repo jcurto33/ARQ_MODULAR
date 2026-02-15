@@ -4,6 +4,14 @@ demo.app
 Gestor de navegación de la aplicación Streamlit.
 """
 
+import sys
+from pathlib import Path
+
+# Asegurar que la raíz del repositorio está en el path para importar src/shared
+_REPO_ROOT = str(Path(__file__).resolve().parent.parent)
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
+
 import streamlit as st
 
 st.set_page_config(
