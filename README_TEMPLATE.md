@@ -1,12 +1,12 @@
-# 📦 IA Demo — Repositorio de Ejemplo
+# 📦 <Nombre del Proyecto>
 
-> **Descripción breve** — Repositorio de ejemplo que implementa la arquitectura modular del equipo de IA. Incluye dos módulos: un clasificador ML clásico (Iris) con tuning de hiperparámetros y un chatbot RAG experto en el IA Act europeo.
+> **Descripción breve** — Una o dos frases que resuman el propósito del proyecto y los módulos que contiene.
 
 | Campo | Detalle |
 |---|---|
-| **Autor(es)** | Javier Curto Hernández |
-| **Fecha de inicio** | 2026-02 |
-| **Estado** | 🟡 En desarrollo |
+| **Autor(es)** | Nombre Apellido |
+| **Fecha de inicio** | YYYY-MM |
+| **Estado** | 🟡 En desarrollo / 🟢 Producción / 🔴 Archivado |
 
 ---
 
@@ -39,7 +39,7 @@
 ├── requirements-dev.txt        # Dependencias de desarrollo (jupyter, pytest…)
 ├── README.md                   # Este archivo
 ├── .env                        # Variables de entorno / secretos (NO versionar)
-├── .env.expample               # Plantilla de .env
+├── .env.example                # Plantilla de .env
 ├── .gitignore                  # Exclusiones de Git
 ├── .venv/                      # Entorno virtual local (NO versionar)
 ├── docker-compose.yaml         # Orquestación de servicios
@@ -65,6 +65,7 @@
 │
 ├── shared/                     # Librerías internas compartidas
 │   ├── __init__.py
+│   ├── config_loader.py        #     Carga de global_config.yaml
 │   ├── database/
 │   │   ├── connection.py       #     Factory de conexión SQL
 │   │   └── vector_store.py     #     Conexión a BBDD vectorial
@@ -75,13 +76,13 @@
 ├── src/                        # Lógica central (producto)
 │   ├── __init__.py
 │   └── modules/
-│       ├── [modulo_ml]/        #     Módulo ML clásico (ej. Forecasting)
+│       ├── [modulo_ml]/        #     Módulo ML clásico
 │       │   ├── __init__.py
 │       │   ├── entrypoint.py   #       Interfaz pública: train / predict
 │       │   ├── training/
 │       │   ├── inference/
 │       │   └── data_processing/
-│       └── [modulo_llm]/       #     Módulo Agente LLM (ej. Chatbot RAG)
+│       └── [modulo_llm]/       #     Módulo Agente LLM
 │           ├── __init__.py
 │           ├── entrypoint.py   #       Interfaz pública: chat / run_server
 │           ├── agents/
@@ -105,21 +106,25 @@
 │       └── Dockerfile
 │
 ├── scripts/                    # Ejecución manual / CLI
-│   ├── iris_ingest.py
-│   ├── ia_act_ingest.py
-│   ├── iris_train.py
-│   └── iris_predict.py
+│   ├── <modulo>_ingest.py
+│   ├── <modulo>_train.py
+│   └── <modulo>_predict.py
 │
 ├── notebooks/                  # Sandbox de experimentación
 │   ├── EDA.ipynb
 │   ├── experiments.ipynb
-│   └── evaluation.ipynb
+│   ├── evaluation.ipynb
+│   └── XAI.ipynb
 │
 └── tests/                      # Aseguramiento de calidad
     ├── conftest.py             #   Fixtures compartidas
     ├── unit/                   #   Tests unitarios
     └── integration/            #   Tests de integración
 ```
+
+> **Nota:** Eliminar las carpetas y archivos que no apliquen al proyecto.
+> Por ejemplo, si no hay módulo LLM se elimina `agents/`, `prompts/`, `mcp_server/`, etc.
+> Si no hay módulo ML se elimina `training/`, `inference/`, etc.
 
 ---
 
@@ -173,12 +178,17 @@ cp .env.example .env
 
 ### 4. Preparar la carpeta `data/`
 
-El dataset Iris se descarga automáticamente con el script de ingesta. Para el chatbot, copia el HTML del IA Act:
+<!-- Describir aquí los pasos necesarios para preparar los datos iniciales del proyecto.
+     Ejemplos:
+     - Copiar ficheros fuente a data/files/raw/
+     - Ejecutar scripts de ingesta
+     - Descargar datasets
+-->
 
 ```bash
-# Copiar el HTML a la ruta esperada
+# Ejemplo: copiar datos fuente
 mkdir -p data/files/raw
-cp L_202401689ES.000101.fmx.html data/files/raw/ia_act.html
+cp <archivo_fuente> data/files/raw/
 ```
 
 ---
@@ -187,18 +197,17 @@ cp L_202401689ES.000101.fmx.html data/files/raw/ia_act.html
 
 ### Ejecución rápida
 
+<!-- Listar los scripts en el orden en que deben ejecutarse para poner el proyecto en marcha -->
+
 ```bash
-# 1. Ingestar el dataset Iris (descarga CSV a data/files/raw/)
-python scripts/iris_ingest.py
+# 1. Ingestar datos
+python scripts/<modulo>_ingest.py
 
-# 2. Ingestar el IA Act (genera embeddings en Qdrant — requiere OPENAI_API_KEY en .env)
-python scripts/ia_act_ingest.py
+# 2. Entrenar modelo (si aplica)
+python scripts/<modulo>_train.py
 
-# 3. Entrenar el modelo Iris (GridSearch + guardado en data/models/)
-python scripts/iris_train.py
-
-# 4. Lanzar predicción batch
-python scripts/iris_predict.py
+# 3. Ejecutar predicción / inferencia (si aplica)
+python scripts/<modulo>_predict.py
 ```
 
 ### Lanzar la demo de Streamlit en local
@@ -209,10 +218,7 @@ Streamlit importa directamente desde `src/`, por lo que **no necesitas levantar 
 streamlit run demo/app.py
 ```
 
-Se abrirá automáticamente en `http://localhost:8501`. Usa el menú lateral para navegar entre las páginas:
-
-- **🌸 Iris Classifier** — Entrena y predice desde la interfaz.
-- **📜 IA Act Chatbot** — Chat interactivo con el agente RAG.
+Se abrirá automáticamente en `http://localhost:8501`. Usa el menú lateral para navegar entre las páginas.
 
 ### Levantar la API en local
 
@@ -248,7 +254,7 @@ docker-compose up --build
 | `files/predictions/` | Resultados de procesos batch |
 | `files/splits/` | Datasets train / test exportados |
 | `bbdd/sql/` | SQLite u otras BBDD relacionales |
-| `bbdd/vector/` | Índices vectoriales (ChromaDB / LanceDB) |
+| `bbdd/vector/` | Índices vectoriales (ChromaDB / LanceDB / Qdrant) |
 | `mlflow/` | Backend store y artifact store de MLflow |
 
 ---
@@ -257,10 +263,11 @@ docker-compose up --build
 
 Cada módulo dentro de `src/modules/` es autónomo y expone su funcionalidad a través de un archivo **`entrypoint.py`** con las funciones que se usarán en producción.
 
+<!-- Rellenar la tabla con los módulos del proyecto -->
+
 | Módulo | Tipo | Entrypoint | Descripción |
 |---|---|---|---|
-| `iris_classifier` | ML Clásico | `train()`, `predict()` | Clasificación de especies Iris con GridSearch sobre RF, GB y SVM |
-| `ia_act_chatbot` | Agente LLM (RAG) | `chat()` | Chatbot experto en el Reglamento IA europeo (UE 2024/1689) |
+| `<nombre_modulo>` | ML Clásico / Agente LLM | `train()`, `predict()` / `chat()` | Breve descripción |
 
 ---
 
@@ -273,12 +280,12 @@ Capa REST construida con **FastAPI**.
 
 Documentación interactiva disponible en `http://localhost:8000/docs` (Swagger UI).
 
+<!-- Rellenar la tabla con los endpoints del proyecto -->
+
 | Método | Endpoint | Descripción |
 |---|---|---|
 | `GET` | `/health` | Health check |
-| `POST` | `/iris/train` | Entrena el modelo con GridSearch |
-| `POST` | `/iris/predict` | Predice especie de Iris (4 features) |
-| `POST` | `/chatbot/chat` | Envía mensaje al chatbot del IA Act |
+| `POST` | `/<modulo>/<accion>` | Descripción del endpoint |
 
 ---
 
@@ -287,8 +294,9 @@ Documentación interactiva disponible en `http://localhost:8000/docs` (Swagger U
 Interfaz visual con **Streamlit** para demos internas y validación. Importa directamente los entrypoints de `src/`, por lo que **no requiere la API** para funcionar.
 
 - **`app.py`** — Gestor de navegación y configuración de `sys.path`.
-- **`pages/1_Iris_Classifier.py`** — Entrenamiento y predicción interactiva.
-- **`pages/2_IA_Act_Chatbot.py`** — Chat con memoria de sesión.
+- **`pages/`** — Una vista por caso de uso.
+
+<!-- Listar las páginas creadas -->
 
 ```bash
 streamlit run demo/app.py
@@ -317,12 +325,13 @@ docker-compose up demo
 
 Wrappers CLI que configuran el entorno y llaman a los entrypoints de `src/`.
 
+<!-- Rellenar la tabla con los scripts del proyecto -->
+
 | Script | Descripción |
 |---|---|
-| `scripts/iris_ingest.py` | Descarga el dataset Iris a `data/files/raw/` |
-| `scripts/ia_act_ingest.py` | Ingesta del HTML del IA Act → embeddings en Qdrant |
-| `scripts/iris_train.py` | Entrena el modelo con GridSearch y guarda artefactos |
-| `scripts/iris_predict.py` | Ejecuta predicción batch |
+| `scripts/<modulo>_ingest.py` | Ingesta de datos del módulo |
+| `scripts/<modulo>_train.py` | Entrenamiento del modelo |
+| `scripts/<modulo>_predict.py` | Predicción / inferencia batch |
 
 ---
 
@@ -354,9 +363,45 @@ pytest --cov=src
 
 Carpeta de **experimentación** (`notebooks/`). Aquí se desarrollan los prototipos que, una vez validados, se encapsulan en `src/` como código de producción.
 
+<!-- Rellenar la tabla con los notebooks del proyecto -->
+
 | Notebook | Propósito |
 |---|---|
-| `EDA.ipynb` | Análisis exploratorio del dataset Iris |
-| `experiments.ipynb` | Comparativa de 6 algoritmos de clasificación |
-| `evaluation.ipynb` | Evaluación completa: confusion matrix, ROC, PR, análisis de errores |
-| `XAI.ipynb` | Explicabilidad: feature importances + SHAP values |
+| `EDA.ipynb` | Análisis exploratorio de datos |
+| `experiments.ipynb` | Comparativa de modelos / agentes |
+| `evaluation.ipynb` | Evaluación de rendimiento: métricas, matrices, curvas |
+| `XAI.ipynb` | Explicabilidad: feature importances, SHAP values |
+
+---
+
+## Flujo de trabajo con Git
+
+<!-- Describir la estrategia de branching del equipo. Ejemplo: -->
+
+| Rama | Propósito |
+|---|---|
+| `main` | Código estable / producción |
+| `develop` | Integración de features |
+| `feature/<nombre>` | Desarrollo de funcionalidades |
+| `hotfix/<nombre>` | Correcciones urgentes |
+
+```bash
+# Crear una feature branch
+git checkout -b feature/<nombre-descriptivo>
+
+# Hacer commits atómicos
+git add .
+git commit -m "feat: descripción del cambio"
+
+# Merge a develop
+git checkout develop
+git merge feature/<nombre-descriptivo>
+```
+
+---
+
+## Notas adicionales
+
+<!-- Espacio libre para documentar decisiones técnicas, limitaciones conocidas, pendientes, etc. -->
+
+- Completar tras la configuración inicial del proyecto.
