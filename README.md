@@ -105,9 +105,10 @@
 │       └── Dockerfile
 │
 ├── scripts/                    # Ejecución manual / CLI
-│   ├── train.py
-│   ├── predict.py
-│   └── ingest.py
+│   ├── iris_ingest.py
+│   ├── ia_act_ingest.py
+│   ├── iris_train.py
+│   └── iris_predict.py
 │
 ├── notebooks/                  # Sandbox de experimentación
 │   ├── EDA.ipynb
@@ -172,15 +173,12 @@ cp .env.example .env
 
 ### 4. Preparar la carpeta `data/`
 
-El dataset Iris se descarga automáticamente al entrenar. Para el chatbot, copia el HTML del IA Act:
+El dataset Iris se descarga automáticamente con el script de ingesta. Para el chatbot, copia el HTML del IA Act:
 
 ```bash
 # Copiar el HTML a la ruta esperada
 mkdir -p data/files/raw
 cp L_202401689ES.000101.fmx.html data/files/raw/ia_act.html
-
-# Ejecutar la ingesta (requiere OPENAI_API_KEY en .env)
-python scripts/ingest.py
 ```
 
 ---
@@ -190,15 +188,31 @@ python scripts/ingest.py
 ### Ejecución rápida
 
 ```bash
-# Entrenar un modelo
-python scripts/train.py
+# 1. Ingestar el dataset Iris (descarga CSV a data/files/raw/)
+python scripts/iris_ingest.py
 
-# Lanzar predicción batch
-python scripts/predict.py
+# 2. Ingestar el IA Act (genera embeddings en Qdrant — requiere OPENAI_API_KEY en .env)
+python scripts/ia_act_ingest.py
 
-# Ingestar datos (ej. PDFs a embeddings)
-python scripts/ingest.py
+# 3. Entrenar el modelo Iris (GridSearch + guardado en data/models/)
+python scripts/iris_train.py
+
+# 4. Lanzar predicción batch
+python scripts/iris_predict.py
 ```
+
+### Lanzar la demo de Streamlit en local
+
+Streamlit importa directamente desde `src/`, por lo que **no necesitas levantar la API**.
+
+```bash
+streamlit run demo/app.py
+```
+
+Se abrirá automáticamente en `http://localhost:8501`. Usa el menú lateral para navegar entre las páginas:
+
+- **🌸 Iris Classifier** — Entrena y predice desde la interfaz.
+- **📜 IA Act Chatbot** — Chat interactivo con el agente RAG.
 
 ### Levantar servicios con Docker
 
@@ -262,12 +276,15 @@ Documentación interactiva disponible en `http://localhost:8000/docs` (Swagger U
 
 ## Demo (`demo/`)
 
-Interfaz visual con **Streamlit** para demos internas y validación.
+Interfaz visual con **Streamlit** para demos internas y validación. Importa directamente los entrypoints de `src/`, por lo que **no requiere la API** para funcionar.
 
-- **`app.py`** — Gestor de navegación.
-- **`pages/`** — Una vista por caso de uso (dashboard ML, chatbot, etc.).
+- **`app.py`** — Gestor de navegación y configuración de `sys.path`.
+- **`pages/1_Iris_Classifier.py`** — Entrenamiento y predicción interactiva.
+- **`pages/2_IA_Act_Chatbot.py`** — Chat con memoria de sesión.
 
-<!-- Editar en caso de no usar Streamlit -->
+```bash
+streamlit run demo/app.py
+```
 
 ---
 
@@ -294,9 +311,10 @@ Wrappers CLI que configuran el entorno y llaman a los entrypoints de `src/`.
 
 | Script | Descripción |
 |---|---|
-| `scripts/train.py` | Lanza el flujo de entrenamiento |
-| `scripts/predict.py` | Ejecuta predicción batch |
-| `scripts/ingest.py` | Ingesta de datos (ej. PDF → Embeddings) |
+| `scripts/iris_ingest.py` | Descarga el dataset Iris a `data/files/raw/` |
+| `scripts/ia_act_ingest.py` | Ingesta del HTML del IA Act → embeddings en Qdrant |
+| `scripts/iris_train.py` | Entrena el modelo con GridSearch y guarda artefactos |
+| `scripts/iris_predict.py` | Ejecuta predicción batch |
 
 ---
 
